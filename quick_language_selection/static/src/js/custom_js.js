@@ -24,30 +24,16 @@ odoo.define('quick_language_selection.custom_js', function (require) {
                     } else {
                         a = '';
                     }
-                    lang_list += '<li><a href="#" data-lang-menu="lang" data-lang-id="' + lang['code'] + '"><img class="flag" src="quick_language_selection/static/src/img/flags/' + lang['code'] + '.png"/>' + ' ' + lang['name'] + ' ' + a  +'</a></li>';
+                    lang_list += '<a href="#" data-lang-menu="lang" data-lang-id="' + lang['code'] + '"><img class="flag" src="quick_language_selection/static/src/img/flags/' + lang['code'] + '.png"/>' + ' ' + lang['name'] + ' ' + a  +'</a><br/>';
                 });
-                lang_list += '<li class="divider"></li>';
                 $('switch-lang').replaceWith(lang_list);
             })
 
-            self._rpc({
-                model: 'ir.config_parameter',
-                method: 'search_read',
-                domain: [['key', '=like', 'app_%']],
-                fields: ['key', 'value'],
-                lazy: false,
-            }).then(function (res) {
-                $.each(res, function (key, val) {
-                    if (val.key == 'app_show_lang' && val.value == "False") {
-                        $('switch-lang').hide();
-                    }
-                });
-            })
         },
         start: function () {
             var self = this;
             return this._super.apply(this, arguments).then(function () {
-                self.$el.on('click', 'li a[data-lang-menu]', function (ev) {
+                self.$el.on('click', 'a[data-lang-menu]', function (ev) {
                     ev.preventDefault();
                     var f = self['_onMenuLang']
                     f.call(self, $(this));
